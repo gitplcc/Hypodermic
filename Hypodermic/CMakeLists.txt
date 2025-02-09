@@ -1,9 +1,7 @@
-project(Hypodermic)
-cmake_minimum_required(VERSION 2.6)
-
+add_library(Hypodermic INTERFACE)
+add_library(Hypodermic::Hypodermic ALIAS Hypodermic)
 
 set(Hypodermic_headers
-
     ActivatedRegistrationInfo.h
     ActivationException.h
     ActivationHandler.h
@@ -102,24 +100,45 @@ set(Hypodermic_headers
     With.h
 )
 
-
-install(FILES ${Hypodermic_headers} DESTINATION include/Hypodermic)
-
-#########################################
-# pkgconfig
-#########################################
-set(VERSION "${HYPODERMIC_VERSION}")
-set(prefix "${CMAKE_INSTALL_PREFIX}")
-set(exec_prefix "\${prefix}")
-set(includedir "\${prefix}/include")
-configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/libhypodermic.pc.in
-    ${CMAKE_CURRENT_BINARY_DIR}/libhypodermic.pc
-@ONLY)
-
-install(
-    FILES ${CMAKE_CURRENT_BINARY_DIR}/libhypodermic.pc
-    DESTINATION lib/pkgconfig
+target_compile_features(Hypodermic INTERFACE cxx_std_11)
+target_compile_options(Hypodermic
+  INTERFACE
+    $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-Wall>
+    $<$<CXX_COMPILER_ID:MSVC>:-Wall>
+)
+set_target_properties(Hypodermic
+  PROPERTIES
+    CXX_EXTENSIONS OFF
+    POSITION_INDEPENDENT_CODE ON
+)
+target_include_directories(Hypodermic
+  INTERFACE
+    $<BUILD_INTERFACE:${Hypodermic_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
+if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
+  install(
+    FILES ${Hypodermic_headers}
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+  )
+  install(
+    TARGETS Hypodermic
+    EXPORT  HypodermicTargets
+  )
 
+  #########################################
+  # pkgconfig support
+  #########################################
+  set(VERSION "${HYPODERMIC_VERSION}")
+  configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/libhypodermic.pc.in
+    ${CMAKE_CURRENT_BINARY_DIR}/libhypodermic.pc
+    @ONLY
+  )
+
+  install(
+    FILES ${CMAKE_CURRENT_BINARY_DIR}/libhypodermic.pc
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
+  )
+endif()

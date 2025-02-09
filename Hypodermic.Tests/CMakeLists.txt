@@ -1,44 +1,38 @@
-project(Hypodermic.Tests)
-cmake_minimum_required(VERSION 2.6)
-
-
-find_package(Boost COMPONENTS system unit_test_framework)
-if(Boost_FOUND)
-    include_directories(${Boost_INCLUDE_DIRS})
-    link_directories(${Boost_LIBRARY_DIRS})
-endif()
-
+find_package(Boost REQUIRED COMPONENTS system unit_test_framework)
 
 set(HypodermicTests_sources
-
-    main.cpp
-
-    CircularDependencyTests.cpp
-    ContainerBuilderTests.cpp
-    ContainerTests.cpp
-    DefaultConstructibleTests.cpp
-    FactoryTests.cpp
-    IsCompleteTests.cpp
-    MemoryTests.cpp
-    NamedTests.cpp
-    NestedContainerTests.cpp
-    PerformanceTests.cpp
-    PersistentInstanceRegistrationTests.cpp
-    ProvidedDependenciesTests.cpp
-    ProvidedInstanceFactoryRegistrationTests.cpp
-    ProvidedInstanceRegistrationTests.cpp
-    RegistrationTests.cpp
-    RuntimeRegistrationTests.cpp
-    UseIfNoneTests.cpp
+  main.cpp
+  CircularDependencyTests.cpp
+  ContainerBuilderTests.cpp
+  ContainerTests.cpp
+  DefaultConstructibleTests.cpp
+  FactoryTests.cpp
+  IsCompleteTests.cpp
+  MemoryTests.cpp
+  NamedTests.cpp
+  NestedContainerTests.cpp
+  PerformanceTests.cpp
+  PersistentInstanceRegistrationTests.cpp
+  ProvidedDependenciesTests.cpp
+  ProvidedInstanceFactoryRegistrationTests.cpp
+  ProvidedInstanceRegistrationTests.cpp
+  RegistrationTests.cpp
+  RuntimeRegistrationTests.cpp
+  UseIfNoneTests.cpp
 )
 
-include_directories("..")
+add_executable(Hypodermic.Tests)
+target_sources(Hypodermic.Tests PRIVATE ${HypodermicTests_sources})
+target_compile_features(Hypodermic.Tests INTERFACE cxx_std_11)
+set_target_properties(Hypodermic.Tests PROPERTIES CXX_EXTENSIONS OFF)
+target_link_libraries(Hypodermic.Tests
+  PRIVATE
+    Hypodermic::Hypodermic
+    Boost::unit_test_framework
+    Boost::dynamic_linking
+)
 
-add_definitions(-DBOOST_TEST_DYN_LINK)
-
-add_executable(Hypodermic.Tests ${HypodermicTests_sources})
-target_link_libraries(Hypodermic.Tests ${Boost_LIBRARIES})
-
-add_test(cmake_Hypodermic.Tests ${CMAKE_CURRENT_BINARY_DIR}/Hypodermic.Tests --result_code=no --report_level=no)
-
-add_custom_command(TARGET Hypodermic.Tests POST_BUILD COMMAND ${CMAKE_CURRENT_BINARY_DIR}/Hypodermic.Tests)
+add_test(
+  NAME cmake_Hypodermic.Tests
+  COMMAND Hypodermic.Tests --result_code=no --report_level=no
+)
