@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16...3.28)
 
 project(Hypodermic
   VERSION 
-    2.5.0
+    2.5.3
   DESCRIPTION 
     "Hypodermic is a non-intrusive header library only IoC container for C++."
   HOMEPAGE_URL
