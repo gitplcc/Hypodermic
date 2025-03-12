@@ -108,8 +108,8 @@ target_compile_options(Hypodermic
 )
 set_target_properties(Hypodermic
   PROPERTIES
-    CXX_EXTENSIONS OFF
-    POSITION_INDEPENDENT_CODE ON
+    INTERFACE_CXX_EXTENSIONS OFF
+    INTERFACE_POSITION_INDEPENDENT_CODE ON
 )
 target_include_directories(Hypodermic
   INTERFACE
@@ -142,3 +142,4 @@ if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
   )
 endif()
+

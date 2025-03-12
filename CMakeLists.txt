@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15...3.28)
+cmake_minimum_required(VERSION 3.16...3.28)
 
 project(Hypodermic
   VERSION 
@@ -11,13 +11,13 @@ project(Hypodermic
     CXX
 )
 
+include(FeatureSummary)
 include(GNUInstallDirs)
 
 include(CheckPIESupported)
 check_pie_supported(LANGUAGES CXX)
-if (NOT CMAKE_CXX_LINK_PIE_SUPPORTED)
-  message(WARNING "PIE is not supported. No flags will be passed to linker.")
-endif()
+add_feature_info(PIE CMAKE_CXX_LINK_PIE_SUPPORTED
+                 "position independent code generation")
 
 if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build." FORCE)
@@ -57,13 +57,13 @@ if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
   #
 
   configure_file(
-      "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
-      "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
-      IMMEDIATE @ONLY
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+    IMMEDIATE @ONLY
   )
 
   add_custom_target(uninstall
-      COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
+    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
   )
 
   # Packaging stuff
@@ -90,3 +90,11 @@ if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
 
   #~ add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
 endif()
+
+feature_summary(
+  QUIET_ON_EMPTY
+  WHAT
+    DISABLED_FEATURES
+  DESCRIPTION "Disabled features:"
+)
+ 
