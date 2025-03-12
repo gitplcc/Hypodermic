@@ -4,6 +4,7 @@ Hypodermic <img align="center" src="../master/resources/syringe_by_Andy_Selimov_
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 [![Build status](https://img.shields.io/appveyor/ci/ybainier/Hypodermic/master.svg?label=windows)](https://ci.appveyor.com/project/ybainier/hypodermic)
 [![Build Status](https://img.shields.io/travis/ybainier/Hypodermic/master.svg?label=linux/osx)](https://travis-ci.org/ybainier/Hypodermic)
+![Build Status](https://github.com/gitplcc/Hypodermic/actions/workflows/ci.yml/badge.svg)
 
 Hypodermic is a non-intrusive header only [IoC container](http://martinfowler.com/articles/injection.html) for C++. It provides dependency injection to your existing design by _managing the creation of your components and their dependencies_ in the right order, sparing you the trouble of writing and maintaining boiler plate code.
 
